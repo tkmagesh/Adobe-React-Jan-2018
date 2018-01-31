@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Calculator</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		class EventEmitter{
+			constructor(){
+				this._listeners = [];
+			}
+			subscribe(listenerFn){
+				if (typeof listenerFn === 'function')
+					this._listeners.push(listenerFn);
+			}
+			triggerChange(){
+				this._listeners.forEach(listenerFn => listenerFn());
+			}
+		}
+		class CalculatorModel extends EventEmitter{
+			constructor(){
+				super();
+				this._data = {
+					n1 : 0,
+					n2 : 0,
+					result : 0
+				};
+				
+			}
+
+			set(attrName, value){
+				if (this._data[attrName] === value) return;
+				this._data[attrName] = value;
+				this.triggerChange();
+			}
+			get(attrName){
+				return this._data[attrName];
+			}
+			
+			add(){
+				var result = this.get('n1') + this.get('n2');
+				this.set('result', result);
+			}
+			subtract(){
+				var result = this.get('n1') - this.get('n2');
+				this.set('result', result);
+			}
+			multiply(){
+				var result = this.get('n1') * this.get('n2');
+				this.set('result', result);
+			}
+			divide(){
+				var result = this.get('n1') / this.get('n2');
+				this.set('result', result);
+			}
+		}
+
+		class Calculator extends React.Component{
+			
+			constructor(){
+				super();
+				this.onAddClick = this.onAddClick.bind(this);
+				this.onSubtractClick = this.onSubtractClick.bind(this);
+				this.onMultiplyClick = this.onMultiplyClick.bind(this);
+				this.onDivideClick = this.onDivideClick.bind(this);
+				this.onTxtNumber1Change = this.onTxtNumber1Change.bind(this);
+				this.onTxtNumber2Change = this.onTxtNumber2Change.bind(this);
+			}
+			onTxtNumber1Change(evt){
+				this.props.model.set('n1', parseInt(evt.target.value,10));
+			}
+			onTxtNumber2Change(evt){
+				this.props.model.set('n2', parseInt(evt.target.value,10));
+			}
+			onAddClick(){
+				this.props.model.add();
+			}
+			onSubtractClick(){
+				this.props.model.subtract();
+			}
+			onMultiplyClick(){
+				this.props.model.multiply();
+			}
+			onDivideClick(){
+				this.props.model.divide();
+			}
+			render(){
+				var result = this.props.model.get('result');
+				return(
+					<div>
+						<h1>Calculator</h1>
+						<hr />
+						<section>
+							<label>Number 1:</label>
+							<input type="number" ref="txtNumber1" onChange={this.onTxtNumber1Change}/>
+						</section>
+						<section>
+							<label>Number 2:</label>
+							<input type="number" ref="txtNumber2" onChange={this.onTxtNumber2Change}/>
+						</section>
+						<input type="button" value="Add" onClick={this.onAddClick}/>
+						<input type="button" value="Subtract" onClick={this.onSubtractClick}/>
+						<input type="button" value="Multiply" onClick={this.onMultiplyClick}/>
+						<input type="button" value="Divide" onClick={this.onDivideClick}/>
+						<div>{result}</div>
+					</div>
+				)
+			}
+		}
+		window.model = new CalculatorModel();
+		model.subscribe(renderApp);
+		function renderApp(){
+			ReactDOM.render(<Calculator model={model}/>,
+				document.getElementById('root'));
+		}
+		renderApp();
+	</script>
+</head>
+<body>
+	
+	<div id="root"></div>
+</body>
+</html>
