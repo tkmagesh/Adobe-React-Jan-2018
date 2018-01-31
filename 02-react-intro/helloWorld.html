@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script>
+		class HelloWorld extends React.Component{
+			render(){
+				var greetMessage = `Hi ${this.props.username}, Welcome to React.js!`;
+				return React.createElement('div', null, 
+					React.createElement('h3', null, greetMessage),
+					React.createElement('hr', null, null),
+					React.createElement('p', null, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, ea eveniet numquam, distinctio ratione eaque aliquam, culpa tempore recusandae natus illum sequi porro alias vel. Voluptatum est magnam, maiores explicabo.'));
+			}
+		}
+		function renderApp(){
+			var uname = prompt('Enter the username :');
+			ReactDOM.render(React.createElement(HelloWorld, {username : uname}),
+				document.getElementById('root'));
+		}
+		function init(){
+			var btnGreet = document.getElementById('btnGreet');
+			btnGreet.addEventListener('click', renderApp);
+		}
+		window.addEventListener('DOMContentLoaded', init);
+	</script>
+</head>
+<body>
+	<input type="button" value="Greet" id="btnGreet">
+	<div id="root"></div>
+</body>
+</html>
