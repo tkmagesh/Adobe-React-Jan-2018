@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		class HelloWorld extends React.Component{
+			state = {
+				greetMessage : '[Default greetMessage]'
+			}
+			constructor(){
+				super();
+				this.onBtnGreetClick = this.onBtnGreetClick.bind(this);
+			}
+			onBtnGreetClick(){
+				var uname = this.refs.txtUserName.value;
+				this.setState({greetMessage : `Hi ${uname}, Welcome to React.js!`});
+			}
+			render(){
+				return (
+					<div>
+						<label>User Name :</label>
+						<input type="text" ref="txtUserName"/>
+						<input type="button" value="Greet" id="btnGreet" onClick={this.onBtnGreetClick} />
+						<h3>{this.state.greetMessage}</h3>
+						<hr />
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, ea eveniet numquam, distinctio ratione eaque aliquam, culpa tempore recusandae natus illum sequi porro alias vel. Voluptatum est magnam, maiores explicabo.
+						</p>
+					</div>
+				);
+			}
+		}
+		function renderApp(){
+			
+			ReactDOM.render(<HelloWorld/>,
+				document.getElementById('root'));
+		}
+		renderApp();
+	</script>
+</head>
+<body>
+	
+	<div id="root"></div>
+</body>
+</html>
