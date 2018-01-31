@@ -44,21 +44,23 @@
 				if (_data[attrName]  === value) return;
 				_data[attrName] = value;
 				//trigger change notification for attrName
-				var listenerFn = _listeners[attrName];
-				if (typeof listenerFn === 'function')
-					listenerFn();
+				var listenerFns = _listeners[attrName];
+				listenerFns.forEach(function(listenerFn){
+					if (typeof listenerFn === 'function')
+						listenerFn();
+				});
 			};
 
 			var _listeners = {
-				basic : null,
-				hra : null,
-				da : null,
-				tax : null,
-				salary : null
+				basic : [],
+				hra : [],
+				da : [],
+				tax : [],
+				salary : []
 			};
 
 			this.onChange = function(attrName, listenerFn){
-				_listeners[attrName] = listenerFn;
+				_listeners[attrName].push(listenerFn);
 			};
 
 		}
@@ -73,6 +75,7 @@
 		$(function(){
 			window.calculator = new SalaryCalculator();
 
+			//Reacting to user actions
 			$('#txtBasic').change(function(){
 				calculator.set('basic', $('#txtBasic').val().toInt());
 			});
@@ -94,6 +97,7 @@
 				calculator.calculate();
 			});
 
+			//Reacting to model changes
 			calculator.onChange('salary', function(){
 				$('#tdSalary').html(calculator.get('salary'));
 			});
