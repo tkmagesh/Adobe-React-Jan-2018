@@ -168,12 +168,15 @@
 			}
 		}*/}
 
-		let CalculatorResult = ({ data }) => {
+		{/*let CalculatorResult = ({ data }) => {
 			let cssClassName = data < 0 ? 'negative' : 'positive';
 			return (
 				<div className={cssClassName}>{data}</div>
 			);
-		}
+		}*/}
+
+		let CalculatorResult = ({ data }) => 
+				(<div className={(data < 0 ? 'negative' : 'positive')}>{data}</div>);
 
 		window.model = new CalculatorModel();
 		model.subscribe(renderApp);
