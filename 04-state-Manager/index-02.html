@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Spinner</title>
+	<script src="stateManager.js"></script>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		let { Component } = React;
+
+		class Spinner extends Component{
+			inc_action = { type : 'INCREMENT' };
+			dec_action = { type : 'DECREMENT' };
+			constructor(){
+				super();
+				this.onIncrementClick = this.onIncrementClick.bind(this);
+				this.onDecrementClick = this.onDecrementClick.bind(this);
+			}
+			onIncrementClick(){
+				this.props.dispatch(this.inc_action);
+			}
+			onDecrementClick(){
+				this.props.dispatch(this.dec_action);
+			}
+			render(){
+				let { spinnerValue } = this.props;
+				return(
+					<div>
+						<input type="button" value="Decrement" onClick={this.onDecrementClick}/>
+						<span> [{spinnerValue}] </span>
+						<input type="button" value="Increment" onClick={this.onIncrementClick}/>
+					</div>
+				)
+			}
+		}
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'INCREMENT')
+				return ++currentState;
+			if (action.type === 'DECREMENT')
+				return --currentState;
+			return currentState;
+		}
+
+		let store = SM.createStore(spinnerReducer);
+
+		function renderApp(){
+			let value = store.getState(),
+				dispatch = store.dispatch;
+
+			ReactDOM.render(<Spinner spinnerValue={value} dispatch={dispatch}/>,
+				document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	<div id="root"></div>
+</body>
+</html>
