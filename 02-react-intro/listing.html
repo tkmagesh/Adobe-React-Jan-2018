@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Calculator</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		class ProductsList extends React.Component{
+			render(){
+				let products = ['Pen', 'Pencil', 'Marker'];
+				/*let items = [];
+				for(let index = 0, count = products.length; index < count; index++){
+					items.push(<li key={index}>{products[index]}</li>);
+				}*/
+				let items = products.map((product, index) => (<li key={index}>{product}</li>));
+				return(
+					<div>
+						<h1>Products</h1>
+						<hr />
+						<label>Product Name :</label>
+						<input type="text" />
+						<input type="button" value="Add New" />
+						<ol>
+							{items}
+						</ol>
+					</div>
+				)
+			}
+		}
+		ReactDOM.render(<ProductsList />,
+			document.getElementById('root'));
+	</script>
+</head>
+<body>
+	
+	<div id="root"></div>
+
+</body>
+</html>
