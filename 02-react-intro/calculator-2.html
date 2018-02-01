@@ -3,6 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Calculator</title>
+	<style>
+		.positive{
+			color : green;
+		}
+		.negative{
+			color : red;
+		}
+	</style>
 	<script src="react.js"></script>
 	<script src="react-dom.js"></script>
 	<script src="babel.min.js"></script>
@@ -57,7 +65,7 @@
 			}
 		}
 
-		class Calculator extends React.Component{
+		{/*class Calculator extends React.Component{
 			
 			constructor(){
 				super();
@@ -65,14 +73,14 @@
 				this.onSubtractClick = this.onSubtractClick.bind(this);
 				this.onMultiplyClick = this.onMultiplyClick.bind(this);
 				this.onDivideClick = this.onDivideClick.bind(this);
-				this.onTxtNumber1Change = this.onTxtNumber1Change.bind(this);
-				this.onTxtNumber2Change = this.onTxtNumber2Change.bind(this);
+				this.onNumber1Change = this.onNumber1Change.bind(this);
+				this.onNumber2Change = this.onNumber2Change.bind(this);
 			}
-			onTxtNumber1Change(evt){
-				this.props.model.set('n1', parseInt(evt.target.value,10));
+			onNumber1Change(value){
+				this.props.model.set('n1', value);
 			}
-			onTxtNumber2Change(evt){
-				this.props.model.set('n2', parseInt(evt.target.value,10));
+			onNumber2Change(value){
+				this.props.model.set('n2', value);
 			}
 			onAddClick(){
 				this.props.model.add();
@@ -92,23 +100,81 @@
 					<div>
 						<h1>Calculator</h1>
 						<hr />
-						<section>
-							<label>Number 1:</label>
-							<input type="number" ref="txtNumber1" onChange={this.onTxtNumber1Change}/>
-						</section>
-						<section>
-							<label>Number 2:</label>
-							<input type="number" ref="txtNumber2" onChange={this.onTxtNumber2Change}/>
-						</section>
+						<CalculatorInput displayName="Number 1:" onValueChange={this.onNumber1Change} />
+						<CalculatorInput displayName="Number 2:" onValueChange={this.onNumber2Change} />
 						<input type="button" value="Add" onClick={this.onAddClick}/>
 						<input type="button" value="Subtract" onClick={this.onSubtractClick}/>
 						<input type="button" value="Multiply" onClick={this.onMultiplyClick}/>
 						<input type="button" value="Divide" onClick={this.onDivideClick}/>
-						<div>{result}</div>
+						<CalculatorResult data={result}/>
 					</div>
 				)
 			}
+		}*/}
+
+		let Calculator = ({model}) => {
+			let result = model.get('result');
+			return(
+				<div>
+					<h1>Calculator</h1>
+					<hr />
+					<CalculatorInput displayName="Number 1:" onValueChange={(value) => model.set('n1', value)} />
+					<CalculatorInput displayName="Number 2:" onValueChange={(value) => model.set('n2', value)} />
+					<input type="button" value="Add" onClick={() => model.add()}/>
+					<input type="button" value="Subtract" onClick={() => model.subtract()}/>
+					<input type="button" value="Multiply" onClick={() => model.multiply()}/>
+					<input type="button" value="Divide" onClick={() => model.divide()}/>
+					<CalculatorResult data={result}/>
+				</div>
+			)
+		};
+		
+
+		{/*class CalculatorInput extends React.Component{
+			onTxtNumberChange(evt){
+				let inputValue = parseInt(evt.target.value,10);
+				this.props.onValueChange(inputValue);
+			}
+			render(){
+				let { displayName } = this.props;
+				return(
+					<section>
+						<label>{displayName}</label>
+						<input type="number"  onChange={this.onTxtNumberChange.bind(this)}/>
+					</section>
+				)
+			}
+		}*/}
+		class CalculatorInput extends React.Component{
+			render(){
+				let { displayName, onValueChange } = this.props;
+				return(
+					<section>
+						<label>{displayName}</label>
+						<input type="number"  onChange={(evt) => onValueChange(evt.target.valueAsNumber)}/>
+					</section>
+				)
+			}
 		}
+
+		{/*class CalculatorResult extends React.Component{
+			render(){
+				let { data } = this.props,
+					cssClassName = data < 0 ? 'negative' : 'positive';
+				return (
+					<div className={cssClassName}>{data}</div>
+				);
+				
+			}
+		}*/}
+
+		let CalculatorResult = ({ data }) => {
+			let cssClassName = data < 0 ? 'negative' : 'positive';
+			return (
+				<div className={cssClassName}>{data}</div>
+			);
+		}
+
 		window.model = new CalculatorModel();
 		model.subscribe(renderApp);
 		function renderApp(){
