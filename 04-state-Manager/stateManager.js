@@ -34,7 +34,18 @@ var SM = (function(){
 			dispatch : dispatch
 		}
 	}
+	function bindActionCreators(actionCreators, dispatch){
+		let result = {};
+		for(let key in actionCreators){
+			result[key] = function(){
+				var action = actionCreators[key].apply(undefined, arguments);
+				dispatch(action);
+			}
+		}
+		return result;
+	}
 	return {
-		createStore : createStore
+		createStore : createStore,
+		bindActionCreators : bindActionCreators
 	}
 })();
