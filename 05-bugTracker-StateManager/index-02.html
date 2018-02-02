@@ -88,7 +88,7 @@
 				<BugStats bugs={bugs}/>
 				<BugSort />
 				<BugEdit addNew={addNew} />
-				<BugList bugs={bugs} toggle={toggle} removeClosed={removeClosed} />
+				<BugList {...{bugs, toggle, removeClosed}} />
 			</div>
 		);
 			
@@ -158,12 +158,7 @@
 		function renderApp(){
 			let bugs = store.getState();
 			ReactDOM.render(
-					<BugTracker 
-						bugs={bugs} 
-						addNew={bugActions.addNew} 
-						toggle={bugActions.toggle}
-						removeClosed = {bugActions.removeClosed}
-						/>,
+					<BugTracker {...{bugs, ...bugActions}}/>,
 				document.getElementById('root'));
 		}
 		store.subscribe(renderApp);
