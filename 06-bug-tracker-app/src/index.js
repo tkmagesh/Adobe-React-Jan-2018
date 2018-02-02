@@ -1,34 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {bindActionCreators} from 'redux';
+import { Provider } from 'react-redux';
 
 import './index.css';
-//import App from './App';
-//import registerServiceWorker from './registerServiceWorker';
-
-//ReactDOM.render(<App />, document.getElementById('root'));
 
 import appStore from './store';
-
-
-import bugActionCreators from './bugTracker/actions';
 import BugTracker from './bugTracker';
-
-import spinnerActionCreators from './spinner/actions';
 import Spinner from './spinner';
 
+ReactDOM.render(
+	<Provider store={appStore}>
+		<div>
+			<BugTracker />
+			<hr/>
+			<Spinner />
+		</div>
+	</Provider>
+, document.getElementById('root'));
 
-let bugActions = bindActionCreators(bugActionCreators, appStore.dispatch);
-
-
-let spinnerActions = bindActionCreators(spinnerActionCreators, appStore.dispatch);
+/*
 
 function renderApp(){
-	let appState = appStore.getState(),
-		bugs = appState.bugState,
-		spinnerValue = appState.spinnerState;
-	console.log(appState);
-	
 	ReactDOM.render(
 			<div>
 				<BugTracker {...{bugs, ...bugActions}}/>
@@ -42,5 +35,5 @@ function renderApp(){
 		document.getElementById('root'));
 }
 appStore.subscribe(renderApp);
-renderApp();
+renderApp();*/
 //registerServiceWorker();
