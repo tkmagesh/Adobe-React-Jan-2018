@@ -1,7 +1,13 @@
-import {createStore} from 'redux';
+import {createStore, combineReducers} from 'redux';
 
 import bugsReducer from '../bugTracker/reducers'
+import spinnerReducer from '../spinner/reducers';
 
-var appStore = createStore(bugsReducer);
+let rootReducer = combineReducers({
+	bugState : bugsReducer,
+	spinnerState : spinnerReducer
+});
+
+var appStore = createStore(rootReducer);
 
 export default appStore;
