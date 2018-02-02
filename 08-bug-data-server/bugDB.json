@@ -1,0 +1,31 @@
+{
+  "bugs": [
+    {
+      "id": 7,
+      "name": "Test 4",
+      "isClosed": false,
+      "createdAt": "2017-10-11T10:28:09.697Z"
+    },
+    {
+      "id": 9,
+      "name": "Test 1",
+      "isClosed": false,
+      "createdAt": "2017-10-11T10:29:27.340Z"
+    },
+    {
+      "id": 10,
+      "name": "Another bug",
+      "isClosed": false
+    }
+  ],
+  "projects": [
+    {
+      "id": "P102",
+      "name": "Bug Tracker"
+    },
+    {
+      "id": "P101",
+      "name": "Payroll Management"
+    }
+  ]
+}

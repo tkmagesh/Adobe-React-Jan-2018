@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -9,14 +9,31 @@ import BugList from './views/BugList';
 
 import bugActionCreators from './actions';
 
-let BugTracker = ({bugs, addNew, toggle, removeClosed }) => (
+/*let BugTracker = ({bugs, addNew, toggle, removeClosed, load }) => (
 	<div>
 		<BugStats bugs={bugs}/>
 		<BugSort />
 		<BugEdit addNew={addNew} />
 		<BugList {...{bugs, toggle, removeClosed}} />
 	</div>
-);
+);*/
+
+class BugTracker extends Component{
+	componentDidMount(){
+		this.props.load();
+	}
+	render(){
+		let {bugs, addNew, toggle, removeClosed } = this.props;
+	 	return (
+			<div>
+				<BugStats bugs={bugs}/>
+				<BugSort />
+				<BugEdit addNew={addNew} />
+				<BugList {...{bugs, toggle, removeClosed}} />
+			</div>
+		);
+	}
+}
 
 function mapStateToProps(appState){
 	let bugs = appState.bugState.filter((bug, index) => index % 2 === appState.spinnerState % 2);

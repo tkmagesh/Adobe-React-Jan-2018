@@ -20,7 +20,10 @@ let Spinner = ({spinnerValue, increment, decrement}) => (
 function mapDispatchToProps(dispatch){
 	let spinnerActions = bindActionCreators(spinnerActionCreators, dispatch);
 	return spinnerActions;
-}*/
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Spinner);
+*/
 
 
 export default connect(
