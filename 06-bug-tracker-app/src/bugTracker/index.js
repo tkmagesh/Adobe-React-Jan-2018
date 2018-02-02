@@ -19,7 +19,7 @@ let BugTracker = ({bugs, addNew, toggle, removeClosed }) => (
 );
 
 function mapStateToProps(appState){
-	let bugs = appState.bugState;
+	let bugs = appState.bugState.filter((bug, index) => index % 2 === appState.spinnerState % 2);
 	return { bugs };
 }
 

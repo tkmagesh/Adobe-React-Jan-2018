@@ -12,7 +12,7 @@ let Spinner = ({spinnerValue, increment, decrement}) => (
 	</div>
 );
 
-function mapStateToProps(appState){
+/*function mapStateToProps(appState){
 	let spinnerValue = appState.spinnerState;
 	return {spinnerValue : spinnerValue};
 }
@@ -20,5 +20,10 @@ function mapStateToProps(appState){
 function mapDispatchToProps(dispatch){
 	let spinnerActions = bindActionCreators(spinnerActionCreators, dispatch);
 	return spinnerActions;
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Spinner);
+}*/
+
+
+export default connect(
+	({spinnerState : spinnerValue}) => ({spinnerValue}), 
+	(dispatch => bindActionCreators(spinnerActionCreators, dispatch))
+)(Spinner);
