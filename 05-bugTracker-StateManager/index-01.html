@@ -95,12 +95,13 @@
 								onClick={() => toggle(bug)}>{bug.name}</span>
 							<div>{bug.isClosed.toString()}</div>
 						</li>
-					));
+					)),
+					closedCount = bugs.reduce((prevResult, bug) => bug.isClosed ? ++prevResult : prevResult, 0);
 
 				return(
 					<div>
 						<section className="stats">
-							<span className="closed">1</span>
+							<span className="closed">{closedCount}</span>
 							<span> / </span>
 							<span>{bugs.length}</span>
 						</section>
