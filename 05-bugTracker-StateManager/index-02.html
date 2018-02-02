@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>BugTracker</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="stateManager.js"></script>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.stats, .bugname{
+			font-size: 20pt;
+		}
+		.bugname{
+			cursor : pointer;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		ol{
+			width: 500px;
+			list-style: none;
+			-webkit-padding-start : 0px;
+		}
+		li{
+			border : 1px solid gray;
+			background-color: #e7e7e7;
+			padding : 10px;
+			margin-bottom: 10px;
+			border-radius: 5px;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script type="text/babel">
+		let { Component } = React;
+		
+		var bugActionCreators = {
+			addNew(newBugName){
+				let newBug = { name : newBugName, isClosed : false};
+				let addNewActionObj = { type : 'ADD_NEW', payload : newBug};
+				return addNewActionObj;
+			},
+			toggle(bugToToggle){
+				let toggledBug = {...bugToToggle, isClosed : !bugToToggle.isClosed};
+				let toggleActionObj = { type : 'UPDATE', payload : {
+					old : bugToToggle,
+					new : toggledBug
+				}};
+				return toggleActionObj;
+			},
+			removeClosed(bugs){
+				let closedBugs = bugs.filter(bug => bug.isClosed);
+				let removeActionObj = { type : 'REMOVE', payload : closedBugs };
+				return removeActionObj;``
+			}
+		}
+		function bugsReducer(currentState = [], action){
+			if (action.type === 'ADD_NEW'){
+				return [...currentState, action.payload];
+			}
+			if (action.type === 'UPDATE'){
+				let {old : oldBug, new : newBug} = action.payload;
+				return currentState.map(bug => bug === oldBug ? newBug : bug)
+			}
+			if (action.type === 'REMOVE'){
+				let bugsToRemove = action.payload; 
+				return currentState.filter(bug => bugsToRemove.indexOf(bug) === -1);
+			}
+			return currentState;
+		}
+
+		var store = SM.createStore(bugsReducer);
+		var bugActions = SM.bindActionCreators(bugActionCreators, store.dispatch);
+
+		let BugTracker = ({bugs, addNew, toggle, removeClosed }) => (
+			<div>
+				<BugStats bugs={bugs}/>
+				<BugSort />
+				<BugEdit addNew={addNew} />
+				<BugList bugs={bugs} toggle={toggle} removeClosed={removeClosed} />
+			</div>
+		);
+			
+
+		let BugItem = ({bug, toggle}) => (
+			<li>
+				<span className={bug.isClosed ? 'bugname closed' : 'bugname'} 
+					onClick={() => toggle(bug)}>{bug.name}</span>
+				<div>{bug.isClosed.toString()}</div>
+			</li>
+		);
+
+		let BugList = ({bugs, toggle, removeClosed}) => {
+			let bugItems = bugs.map((bug, index) => (
+				<BugItem bug={bug} toggle={toggle} key={index} />
+			));
+			return(
+				<section className="list">
+					<ol>
+						{bugItems}
+					</ol>
+					<input type="button" value="Remove Closed" onClick={() => removeClosed(bugs)}/>
+				</section>
+			)
+		};
+
+		class BugEdit extends Component{
+			state = {
+				newBugName : ''
+			}
+			render(){
+				let { addNew } = this.props;
+				return(
+					<section className="edit">
+						<label htmlFor="">Bug Name :</label>
+						<input type="text" onChange={(evt) => this.setState({newBugName : evt.target.value}) }/>
+						<input type="button" value="Create New" onClick = {() => addNew(this.state.newBugName)}/>
+					</section>
+				)
+			}
+		}
+
+		let BugSort = () => (
+			<section className="sort">
+				<label htmlFor="">Order By :</label>
+				<select>
+					<option value=""></option>
+					<option value=""></option>
+				</select>
+				<label htmlFor="">Descending ? :</label>
+				<input type="checkbox" />
+			</section>
+		);
+
+		let BugStats = ({bugs}) => {
+			let closedCount = bugs.reduce((prevResult, bug) => bug.isClosed ? ++prevResult : prevResult, 0);
+			return (
+				<section className="stats">
+					<span className="closed">{closedCount}</span>
+					<span> / </span>
+					<span>{bugs.length}</span>
+				</section>
+			);
+		};
+
+		
+		function renderApp(){
+			let bugs = store.getState();
+			ReactDOM.render(
+					<BugTracker 
+						bugs={bugs} 
+						addNew={bugActions.addNew} 
+						toggle={bugActions.toggle}
+						removeClosed = {bugActions.removeClosed}
+						/>,
+				document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr />
+	<div id="root"></div>
+</body>
+</html>
